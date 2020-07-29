@@ -1,6 +1,6 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-debian.template
 FROM php:7.4-apache-buster
-
+RUN apt update && apt install smbclient
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
     \
@@ -38,7 +38,6 @@ RUN set -ex; \
         libzip-dev \
         libwebp-dev \
         libgmp-dev \
-        smbclient \
     ; \
     \
     debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
