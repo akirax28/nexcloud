@@ -9,7 +9,7 @@ services:
       - POSTGRES_USER=postgres
     volumes:
       - postgres:/var/lib/postgresql/data
-      - backups:/backups\
+      - backups:/backups
     deploy:
       resources:
         limits:
@@ -54,15 +54,15 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /data/nexcloud/postgres
+      device: /data/nextcloud/postgres
   backups:
     driver_opts:
       o: bind
       type: none
-      device: /data/nexcloud/backups
+      device: /data/nextcloud/backups
   nextcloud:
     driver_opts:
       o: bind
       type: none
-      device: /data/nexcloud/nextcloud
+      device: /data/nextcloud/nextcloud
 
