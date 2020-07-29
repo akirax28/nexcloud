@@ -17,7 +17,7 @@ services:
           cpus: '0.5'
 
   nextcloud:
-    image: nextcloud:17.0.8-fpm-alpine
+    image: akirax/nextcloud
     depends_on:
       - postgres
       - redis
