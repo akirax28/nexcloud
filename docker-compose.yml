@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:12.3-alpine
+    environment:
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - backups:/backups\
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+
+  nextcloud:
+    image: nextcloud:17.0.8-fpm-alpine
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_DB=nextcloud
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - NEXTCLOUD_ADMIN=admin
+      - NEXTCLOUD_ADMIN_USER=admin
+      - REDIS_HOST=redis
+    ports:
+      - 8076:80
+    volumes:
+      - nextcloud:/var/www/html
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+
+  redis:
+    image: redis:alpine
+    environment:
+      - REDIS_DATABASES=1
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+
+volumes:
+  postgres:
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/nexcloud/postgres
+  backups:
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/nexcloud/backups
+  nextcloud:
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/nexcloud/nextcloud
+
