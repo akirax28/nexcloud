@@ -1,6 +1,6 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-debian.template
 FROM php:7.4-apache-buster
-RUN apt update && apt install smbclient
+RUN apt update && apt install smbclient -y
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
     \
