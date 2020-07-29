@@ -1,5 +1,5 @@
 # DO NOT EDIT: created by update.sh from Dockerfile-debian.template
-FROM php:7.3-apache-buster
+FROM php:7.4-apache-buster
 
 # entrypoint.sh and cron.sh dependencies
 RUN set -ex; \
@@ -38,15 +38,14 @@ RUN set -ex; \
         libzip-dev \
         libwebp-dev \
         libgmp-dev \
-        smbclient\
+        smbclient \
     ; \
     \
     debMultiarch="$(dpkg-architecture --query DEB_BUILD_MULTIARCH)"; \
-    if [ ! -e /usr/include/gmp.h ]; then ln -s /usr/include/$debMultiarch/gmp.h /usr/include/gmp.h; fi;\
-    docker-php-ext-configure gd --with-freetype-dir=/usr --with-png-dir=/usr --with-jpeg-dir=/usr --with-webp-dir=/usr; \
-    docker-php-ext-configure gmp --with-gmp="/usr/include/$debMultiarch"; \
+    docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp; \
     docker-php-ext-configure ldap --with-libdir="lib/$debMultiarch"; \
     docker-php-ext-install -j "$(nproc)" \
+        bcmath \
         exif \
         gd \
         intl \
@@ -62,7 +61,7 @@ RUN set -ex; \
 # pecl will claim success even if one install fails, so we need to perform each install separately
     pecl install APCu-5.1.18; \
     pecl install memcached-3.1.5; \
-    pecl install redis-4.3.0; \
+    pecl install redis-5.3.1; \
     pecl install imagick-3.4.4; \
     \
     docker-php-ext-enable \
@@ -116,7 +115,7 @@ RUN a2enmod headers rewrite remoteip ;\
     } > /etc/apache2/conf-available/remoteip.conf;\
     a2enconf remoteip
 
-ENV NEXTCLOUD_VERSION 17.0.8
+ENV NEXTCLOUD_VERSION 19.0.1
 
 RUN set -ex; \
     fetchDeps=" \
