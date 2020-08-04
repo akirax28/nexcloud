@@ -1,31 +1,31 @@
 version: '3.7'
 
 services:
-  postgres:
-    image: postgres:12.3-alpine
+  mariadb:
+    image: mariadb:10.5.4
     environment:
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
+      - MYSQL_ROOT_PASSWORD=mariadb
+      - MYSQL_USER=mariadb
+      - MYSQL_DATABASE=nextcloud
     volumes:
-      - postgres:/var/lib/postgresql/data
+      - mariadb:/var/lib/postgresql/data
       - backups:/backups
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.5'
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 256M
+#          cpus: '0.5'
 
   nextcloud:
     image: akirax/nextcloud
     depends_on:
-      - postgres
+      - mariadb
       - redis
     environment:
-      - POSTGRES_HOST=postgres
-      - POSTGRES_DB=nextcloud
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - MYSQL_HOST=mariadb
+      - MYSQL_DB=nextcloud
+      - MYSQL_USER=mariadb
+      - MYSQL_PASSWORD=mariadb
       - NEXTCLOUD_ADMIN=admin
       - NEXTCLOUD_ADMIN_USER=admin
       - REDIS_HOST=redis
@@ -33,11 +33,11 @@ services:
       - 8076:80
     volumes:
       - nextcloud:/var/www/html
-    deploy:
-      resources:
-        limits:
-          memory: 256M
-          cpus: '0.5'
+#    deploy:
+#      resources:
+#        limits:
+#          memory: 256M
+#          cpus: '0.5'
 
   redis:
     image: redis:alpine
@@ -50,11 +50,11 @@ services:
           cpus: '0.5'
 
 volumes:
-  postgres:
+  mariadb:
     driver_opts:
       o: bind
       type: none
-      device: /data/nextcloud/postgres
+      device: /data/nextcloud/mariadb
   backups:
     driver_opts:
       o: bind
@@ -65,4 +65,3 @@ volumes:
       o: bind
       type: none
       device: /data/nextcloud/nextcloud
-
