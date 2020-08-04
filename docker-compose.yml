@@ -7,11 +7,15 @@ services:
       - MYSQL_ROOT_PASSWORD=mariadb
       - MYSQL_USER=mariadb
       - MYSQL_DATABASE=nextcloud
+      - MYSQL_PASSWORD=mariadb
     volumes:
       - mariadb:/var/lib/postgresql/data
       - backups:/backups
-#    deploy:
-#      resources:
+    deploy:
+      placement:
+        constraints:
+          - node.labels.tipo == teste
+#     resources:
 #        limits:
 #          memory: 256M
 #          cpus: '0.5'
@@ -33,7 +37,10 @@ services:
       - 8076:80
     volumes:
       - nextcloud:/var/www/html
-#    deploy:
+    deploy:
+      placement:
+        constraints:
+          - node.labels.tipo == teste
 #      resources:
 #        limits:
 #          memory: 256M
@@ -44,6 +51,9 @@ services:
     environment:
       - REDIS_DATABASES=1
     deploy:
+      placement:
+        constraints:
+          - node.labels.tipo == teste
       resources:
         limits:
           memory: 256M
