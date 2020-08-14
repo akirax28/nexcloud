@@ -35,6 +35,7 @@ services:
       - 8076:80
     volumes:
       - nextcloud:/var/www/html
+      - datanextcloud:/data
     deploy:
       resources:
         limits:
@@ -67,3 +68,8 @@ volumes:
       o: bind
       type: none
       device: /data/nextcloud/nextcloud
+  datanextcloud:
+    driver_opts:
+      o: bind
+      type: none
+      device: /mnt/nuvem/nuvem/owncloud/data
