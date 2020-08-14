@@ -72,4 +72,4 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /data/nextcloud/data
+      device: /data/nextcloud/data/nuvem/owncloud/data
